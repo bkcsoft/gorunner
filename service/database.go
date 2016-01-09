@@ -7,10 +7,10 @@ import (
 )
 
 const (
-	jobsFile     = "jobs.json"
-	runsFile     = "runs.json"
-	tasksFile    = "tasks.json"
-	triggersFile = "triggers.json"
+	jobsFile     = "db/jobs.json"
+	runsFile     = "db/runs.json"
+	tasksFile    = "db/tasks.json"
+	triggersFile = "db/triggers.json"
 )
 
 type ListWriter func([]byte, string)

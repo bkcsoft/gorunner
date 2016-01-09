@@ -9,7 +9,7 @@ import (
 	. "github.com/jakecoffman/gorunner/service"
 )
 
-const port = "localhost:8090"
+const port = ":8090"
 
 var routes = []struct {
 	route   string

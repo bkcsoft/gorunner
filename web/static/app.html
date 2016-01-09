@@ -54,10 +54,10 @@
                     <ul class="nav nav-pills nav-stacked">
                         <li class="history" ng-repeat="run in recent track by $index">
                             <a href='/#/runs/{{ run.uuid }}'>
-                        <span class='label'
-                              ng-class="{'label-success': run.status=='Done', 'label-info': run.status=='Running', 'label-important': run.status=='Failed'}">
-                            <i class="icon-spinner icon-spin" ng-show="run.status=='Running'"></i> {{ run.job.name }}
-                        </span>
+								<span class='label'
+									  ng-class="{'label-success': run.status=='Done', 'label-info': run.status=='Running', 'label-danger': run.status=='Failed'}">
+									<i class="icon-spinner icon-spin" ng-show="run.status=='Running'"></i> {{ run.job.name }}
+								</span>
                                 <span class="pull-right">{{run.start|date:'MM/dd hh:mm:ss a'}}</span>
                             </a>
                         </li>
