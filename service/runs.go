@@ -28,6 +28,7 @@ type Run struct {
 	End     time.Time `json:"end"`
 	Results []*Result `json:"results"`
 	Status  string    `json:"status"`
+	Payload string    `json:"payload"`
 }
 
 func (r Run) ID() string {
@@ -99,8 +100,8 @@ func (l RunList) GetRecent(offset, length int) []elementer {
 	return runs
 }
 
-func (j *RunList) AddRun(UUID string, job Job, tasks []Task) error {
-	run := Run{UUID: UUID, Job: job, Tasks: tasks, Start: time.Now(), Status: "New"}
+func (j *RunList) AddRun(UUID string, job Job, tasks []Task, payload string) error {
+	run := Run{UUID: UUID, Job: job, Tasks: tasks, Start: time.Now(), Status: "New", Payload: payload}
 	// check to make sure that UUID doesn't already exist
 	var found bool = false
 	for _, j := range j.elements {
@@ -148,6 +149,8 @@ func (l *RunList) execute(r *Run) {
 		cmd := exec.Command(shell, commandArg, task.Script)
 
 		cmd.Env = append(cmd.Env, "UUID=" + r.UUID)
+		cmd.Env = append(cmd.Env, "TASK=" + task.Name)
+		cmd.Env = append(cmd.Env, "PAYLOAD=" + r.Payload);
 
 		outPipe, err := cmd.StdoutPipe()
 		if err != nil {

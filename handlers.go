@@ -204,12 +204,49 @@ func addRun(c context, w http.ResponseWriter, r *http.Request) (int, interface{}
 		t := task.(Task)
 		tasks = append(tasks, t)
 	}
-	err = c.RunList().AddRun(id.String(), j, tasks)
+	err = c.RunList().AddRun(id.String(), j, tasks, "{}")
 	if err != nil {
 		return http.StatusInternalServerError, err.Error()
 	}
 
 	return http.StatusCreated, map[string]string{"uuid": id.String()}
+}
+
+func addRun2(c context, w http.ResponseWriter, r *http.Request) (int, interface{}) {
+//	payload := unmarshal(r.Body, "repository", w)
+	payload, err := ioutil.ReadAll(r.Body);
+	if err != nil {
+		return http.StatusInternalServerError, err.Error()
+	}
+
+	vars := mux.Vars(r)
+	job, err := c.JobList().Get(vars["job"])
+	if err != nil {
+		return http.StatusInternalServerError, err.Error()
+	}
+	j := job.(Job)
+
+	id, err := uuid.NewV4()
+	if err != nil {
+		return http.StatusInternalServerError, err.Error()
+	}
+
+	var tasks []Task
+	for _, taskName := range j.Tasks {
+		task, err := c.TaskList().Get(taskName)
+		if err != nil {
+			panic(err)
+		}
+		t := task.(Task)
+		tasks = append(tasks, t)
+	}
+	err = c.RunList().AddRun(id.String(), j, tasks, byteToString(payload))
+	if err != nil {
+		return http.StatusInternalServerError, err.Error()
+	}
+
+	return http.StatusCreated, map[string]string{"uuid": id.String()}
+
 }
 
 func getRun(c context, w http.ResponseWriter, r *http.Request) (int, interface{}) {

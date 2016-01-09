@@ -58,7 +58,7 @@ func (e Executor) runnit(j Job) {
 		t := task.(Task)
 		tasks = append(tasks, t)
 	}
-	err = e.runList.AddRun(id.String(), j, tasks)
+	err = e.runList.AddRun(id.String(), j, tasks, "{}")
 	if err != nil {
 		panic(err)
 	}

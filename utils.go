@@ -7,6 +7,18 @@ import (
 	"net/http"
 )
 
+func byteToString(c []byte) string {
+	n := -1
+	for i, b := range c {
+		if b == 0 {
+			break
+		}
+		n = i
+	}
+	return string(c[:n+1])
+}
+
+
 func marshal(item interface{}, w http.ResponseWriter) {
 	bytes, err := json.Marshal(item)
 	if err != nil {
