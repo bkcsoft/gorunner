@@ -121,6 +121,23 @@ func (j *RunList) AddRun(UUID string, job Job, tasks []Task) error {
 	return nil
 }
 
+func (j *RunList) DeleteRun(UUID string) error {
+	var found bool = false
+	j.Lock()
+	defer j.Unlock()
+	for idx, i := range j.elements {
+		if UUID == i.(Run).UUID {
+			j.elements = append(j.elements[:idx], j.elements[idx+1:]...)
+			found = true
+		}
+	}
+	if !found {
+		return errors.New("Run with that name was not found in list")
+	}
+	j.save()
+	return nil
+}
+
 func (l *RunList) execute(r *Run) {
 	r.Status = "Running"
 	for _, task := range r.Tasks {

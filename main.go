@@ -34,7 +34,9 @@ var routes = []struct {
 
 	{"/runs", listRuns, "GET"},
 	{"/runs", addRun, "POST"},
+	{"/runs", deleteRuns, "DELETE"},
 	{"/runs/{run}", getRun, "GET"},
+	{"/runs/{run}", deleteRun, "DELETE"},
 
 	{"/triggers", listTriggers, "GET"},
 	{"/triggers", addTrigger, "POST"},

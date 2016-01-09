@@ -3,6 +3,8 @@ package main
 import (
 	"net/http"
 	"strconv"
+	"io/ioutil"
+	"encoding/json"
 
 	"github.com/gorilla/mux"
 	"github.com/gorilla/websocket"
@@ -217,6 +219,34 @@ func getRun(c context, w http.ResponseWriter, r *http.Request) (int, interface{}
 		return http.StatusNotFound, err.Error()
 	}
 	return http.StatusOK, run
+}
+
+func deleteRuns(c context, w http.ResponseWriter, r *http.Request) (int, interface{}) {
+	data, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		return http.StatusInternalServerError, err.Error()
+	}
+	var runs []string
+	err = json.Unmarshal(data, &runs)
+	if err != nil {
+		return http.StatusInternalServerError, err.Error()
+	}
+	for _, run := range runs {
+		err := c.RunList().DeleteRun(run)
+		if err != nil {
+			return http.StatusNotFound, err.Error()
+		}
+	}
+	return http.StatusOK, nothing
+}
+
+func deleteRun(c context, w http.ResponseWriter, r *http.Request) (int, interface{}) {
+	vars := mux.Vars(r)
+	err := c.RunList().DeleteRun(vars["run"])
+	if(err != nil) {
+		return http.StatusNotFound, err.Error()
+	}
+	return http.StatusOK, nothing
 }
 
 // Tasks
