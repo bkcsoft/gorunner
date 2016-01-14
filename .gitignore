@@ -1,7 +1,1 @@
-*.json
-
-/.idea
-
-/*.iml
-
-/*.exe
+.dockerignore
