@@ -148,9 +148,13 @@ func (l *RunList) execute(r *Run) {
 		shell, commandArg := getShell()
 		cmd := exec.Command(shell, commandArg, task.Script)
 
+		// Insert Environment
+		for _, env := range os.Environ() {
+			cmd.Env = append(cmd.Env, env)
+		}
 		cmd.Env = append(cmd.Env, "UUID=" + r.UUID)
 		cmd.Env = append(cmd.Env, "TASK=" + task.Name)
-		cmd.Env = append(cmd.Env, "PAYLOAD=" + r.Payload);
+		cmd.Env = append(cmd.Env, "PAYLOAD=" + r.Payload)
 
 		outPipe, err := cmd.StdoutPipe()
 		if err != nil {
