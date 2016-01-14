@@ -128,6 +128,7 @@ func main() {
 	// non REST routes
 	r.PathPrefix("/static/").Handler(http.FileServer(http.Dir("web/")))
 	r.HandleFunc("/", app).Methods("GET")
+	r.HandleFunc("/favicon.ico", favicon).Methods("GET")
 	r.Handle("/ws", appHandler{appContext, wsHandler}).Methods("GET")
 
 	for _, detail := range routes {

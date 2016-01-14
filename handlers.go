@@ -24,6 +24,10 @@ func app(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "web/static/app.html")
 }
 
+func favicon(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "web/favicon.ico")
+}
+
 func wsHandler(c context, w http.ResponseWriter, r *http.Request) (int, interface{}) {
 	// Upgrade the HTTP connection to a websocket
 	ws, err := websocket.Upgrade(w, r, nil, 1024, 1024)
