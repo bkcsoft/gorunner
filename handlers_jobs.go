@@ -92,11 +92,12 @@ func addTriggerToJob(c context, w http.ResponseWriter, r *http.Request) (int, in
 	payload := unmarshal(r.Body, "trigger", w)
 
 	j.AppendTrigger(payload["trigger"])
-	t, err := c.TriggerList().Get(payload["trigger"])
+/*	t, err := c.TriggerList().Get(payload["trigger"])
 	if err != nil {
 		return http.StatusInternalServerError, err.Error()
 	}
 	c.Executor().ArmTrigger(t.(Trigger))
+*/
 	c.JobList().Update(j)
 
 	return http.StatusCreated, nothing

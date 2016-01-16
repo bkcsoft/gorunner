@@ -22,7 +22,7 @@ var routes = []struct {
 	{"/jobs/{job}", deleteJob, "DELETE"},
 	{"/jobs/{job}/tasks", addTaskToJob, "POST"},
 	{"/jobs/{job}/tasks/{task}", removeTaskFromJob, "DELETE"},
-	{"/jobs/{job}/triggers/", addTriggerToJob, "POST"},
+	{"/jobs/{job}/triggers", addTriggerToJob, "POST"},
 	{"/jobs/{job}/triggers/{trigger}", removeTriggerFromJob, "DELETE"},
 
 	{"/tasks", listTasks, "GET"},
@@ -32,10 +32,11 @@ var routes = []struct {
 	{"/tasks/{task}", deleteTask, "DELETE"},
 	{"/tasks/{task}/jobs", listJobsForTask, "GET"},
 
+	{"/hooks/gogs", hookGogs, "POST"},
+
 	{"/runs", listRuns, "GET"},
 	{"/runs", addRun, "POST"},
 	{"/runs", deleteRuns, "DELETE"},
-	{"/runs/{job}", addRun2, "POST"},
 	{"/runs/{run}", getRun, "GET"},
 	{"/runs/{run}", deleteRun, "DELETE"},
 
