@@ -115,16 +115,8 @@ func getRun(c context, w http.ResponseWriter, r *http.Request) (int, interface{}
 }
 
 func deleteRuns(c context, w http.ResponseWriter, r *http.Request) (int, interface{}) {
-	data, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		return http.StatusInternalServerError, err.Error()
-	}
-	var runs []string
-	err = json.Unmarshal(data, &runs)
-	if err != nil {
-		return http.StatusInternalServerError, err.Error()
-	}
-	for _, run := range runs {
+	runs := unmarshalAll(r.Body, w)
+	for _, run := range runs.([]string) {
 		err := c.RunList().DeleteRun(run)
 		if err != nil {
 			return http.StatusNotFound, err.Error()
@@ -141,4 +133,3 @@ func deleteRun(c context, w http.ResponseWriter, r *http.Request) (int, interfac
 	}
 	return http.StatusOK, nothing
 }
-

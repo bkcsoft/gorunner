@@ -60,4 +60,3 @@ func listJobsForTask(c context, w http.ResponseWriter, r *http.Request) (int, in
 	jobs := c.JobList().GetJobsWithTask(vars["task"])
 	return http.StatusOK, jobs
 }
-

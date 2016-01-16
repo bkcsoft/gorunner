@@ -122,4 +122,3 @@ func removeTriggerFromJob(c context, w http.ResponseWriter, r *http.Request) (in
 	}
 	return http.StatusOK, nothing
 }
-

@@ -38,4 +38,3 @@ func wsHandler(c context, w http.ResponseWriter, r *http.Request) (int, interfac
 	conn.Reader()
 	return http.StatusOK, nothing
 }
-
