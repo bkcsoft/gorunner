@@ -66,7 +66,7 @@ function JobCtl($scope, $routeParams, Job, Task, Trigger) {
 	};
 
 	$scope.deleteJob = function() {
-		Job.$delete({id: $routeParams.job});
+		Job.delete({id: $routeParams.job});
 		window.location = "/#/jobs";
 	};
 
