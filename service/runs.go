@@ -28,7 +28,7 @@ type Run struct {
 	End     time.Time     `json:"end"`
 	Results []*Result     `json:"results"`
 	Status  string        `json:"status"`
-	Env     []Environment `json:"payload"`
+	Env     []Environment `json:"envs"`
 }
 
 func (r Run) ID() string {
