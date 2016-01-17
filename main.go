@@ -56,6 +56,7 @@ var routes = []struct {
 	{"/tasks/{task}/jobs", listJobsForTask, "GET"},
 
 	{"/hooks/gogs", hookGogs, "POST"},
+	{"/hooks/bitbucket", hookBitbucket, "POST"},
 
 	{"/runs", listRuns, "GET"},
 	{"/runs", addRun, "POST"},
