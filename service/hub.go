@@ -3,6 +3,7 @@ package service
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"sort"
 
 	"github.com/gorilla/websocket"
@@ -52,16 +53,16 @@ func (h *Hub) HubLoop() {
 	for {
 		select {
 		case c := <-h.register:
-			fmt.Println("Connect")
+			log.Println("Connection from " + c.ws.RemoteAddr().String())
 			h.connections[c] = true
 			bytes := h.onRefresh()
 			c.send <- bytes
 		case c := <-h.unregister:
-			fmt.Println("Disconnect")
+			log.Println("Disconnect")
 			delete(h.connections, c)
 			close(c.send)
 		case <-h.refresh:
-			fmt.Println("Refreshing")
+			log.Println("Refreshing")
 			bytes := h.onRefresh()
 			for c := range h.connections {
 				select {
