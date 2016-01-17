@@ -4,12 +4,35 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/gorilla/mux"
 	. "github.com/jakecoffman/gorunner/service"
+
+	"gopkg.in/ini.v1"
+)
+
+type AppSettings struct {
+	AppName  string `ini:"APP_NAME"`
+	HTTPPort int    `ini:"HTTP_PORT"`
+	ServeIP  string `ini:"SERVE_IP"`
+}
+
+var (
+	Settings AppSettings
 )
 
 const port = ":8090"
+
+func loadSettings(filename string) {
+	err := ini.MapTo(&Settings, filename)
+	if err != nil {
+		log.Println("Failed to load `" + filename + "`. Using Defaults instead")
+		log.Println(err)
+		Settings.HTTPPort = 8090
+		Settings.ServeIP = "0.0.0.0"
+	}
+}
 
 var routes = []struct {
 	route   string
@@ -135,7 +158,10 @@ func main() {
 	for _, detail := range routes {
 		r.Handle(detail.route, appHandler{appContext, detail.handler}).Methods(detail.method)
 	}
+	loadSettings("db/app.ini")
 
-	log.Println("Running on " + port)
-	http.ListenAndServe(port, r)
+	host := Settings.ServeIP + ":" + strconv.Itoa(Settings.HTTPPort)
+
+	log.Println("Running on " + host)
+	http.ListenAndServe(host, r)
 }
