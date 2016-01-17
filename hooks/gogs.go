@@ -1,9 +1,9 @@
 package hooks
 
 import (
-	"ioutil"
 	"encoding/json"
 	"io"
+	"io/ioutil"
 )
 
 type GogsSender struct {
@@ -49,7 +49,7 @@ type GogsHook struct {
 	Sender     *GogsSender    `json:"sender"`
 }
 
-func ParseGogsHook(r io.Reader) (gogs GogsHook, err Error) {
+func ParseGogsHook(r io.Reader) (gogs *GogsHook, err error) {
 	data, err := ioutil.ReadAll(r)
 	if err != nil {
 		//http.Error(w, err.Error(), http.StatusBadRequest)
@@ -62,5 +62,5 @@ func ParseGogsHook(r io.Reader) (gogs GogsHook, err Error) {
 		return nil, err
 	}
 
-	return gogs
+	return gogs, nil
 }
