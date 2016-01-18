@@ -6,26 +6,26 @@ import (
 	"io/ioutil"
 )
 
-type GogsSender struct {
+type gogsSender struct {
 	Login     string `json:"login"`
 	Id        int    `json:"id"`
 	AvatarUrl string `json:"avatar_url"`
 }
 
-type GogsUser struct {
+type gogsUser struct {
 	Name     string `json:"name"`
 	Email    string `json:"email"`
 	Username string `json:"username"`
 }
 
-type GogsCommit struct {
+type gogsCommit struct {
 	Id      string   `json:"id"`
 	Message string   `json:"message"`
 	Url     string   `json:"url"`
-	Author  GogsUser `json:"author"`
+	Author  gogsUser `json:"author"`
 }
 
-type GogsRepository struct {
+type gogsRepository struct {
 	Id          int      `json:"id"`
 	Name        string   `json:"name"`
 	Url         string   `json:"url"`
@@ -34,22 +34,22 @@ type GogsRepository struct {
 	Description string   `json:"description"`
 	Website     string   `json:"website"`
 	Watchers    int      `json:"watchers"`
-	Owner       GogsUser `json:"owner"`
+	Owner       gogsUser `json:"owner"`
 }
 
-type GogsHook struct {
+type gogsHook struct {
 	Secret     string         `json:"secret"`
 	Ref        string         `json:"ref"`
 	Before     string         `json:"before"`
 	After      string         `json:"after"`
 	CompareUrl string         `json:"compare_url"`
-	Commits    []GogsCommit   `json:"commits"`
-	Repository GogsRepository `json:"repository"`
-	Pusher     *GogsUser      `json:"pusher"`
-	Sender     *GogsSender    `json:"sender"`
+	Commits    []gogsCommit   `json:"commits"`
+	Repository gogsRepository `json:"repository"`
+	Pusher     *gogsUser      `json:"pusher"`
+	Sender     *gogsSender    `json:"sender"`
 }
 
-func ParseGogsHook(r io.Reader) (gogs *GogsHook, err error) {
+func ParseGogsHook(r io.Reader) (gogs *gogsHook, err error) {
 	data, err := ioutil.ReadAll(r)
 	if err != nil {
 		//http.Error(w, err.Error(), http.StatusBadRequest)

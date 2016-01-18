@@ -11,14 +11,14 @@ import (
 
 type msi map[string]interface{}
 
-type GenericHook struct {
+type genericHook struct {
 	RepoName string
 	RepoURL string
 	LastCommit string
 	Branch string
 }
 
-func runHook(c context, gh GenericHook) (int, interface{}) {
+func runHook(c context, gh genericHook) (int, interface{}) {
 	var envs []Environment
 	envs = append(envs, Environment{Name: "branch", Id: "CI_BRANCH", Value: gh.Branch})
 	envs = append(envs, Environment{Name: "repourl", Id: "CI_REPOURL", Value: gh.RepoURL})
@@ -69,7 +69,7 @@ func hookGogs(c context, w http.ResponseWriter, r *http.Request) (int, interface
 		branch = ref[2]
 	}
 
-	gh := GenericHook{ RepoName: reponame, RepoURL: repourl, LastCommit: last_commit, Branch: branch }
+	gh := genericHook{ RepoName: reponame, RepoURL: repourl, LastCommit: last_commit, Branch: branch }
 	return runHook(c, gh)
 }
 
@@ -79,11 +79,11 @@ func hookBitbucket(c context, w http.ResponseWriter, r *http.Request) (int, inte
 		return http.StatusInternalServerError, err.Error()
 	}
 
-	reponame := msg.Repository.Name
+	reponame := strings.ToLower(msg.Repository.Name)
 	last_commit := msg.Push.Changes[0].New.Target.Hash
 	branch := msg.Push.Changes[0].New.Name
 	repourl := "git@bitbucket.org:" + msg.Repository.FullName + ".git"
 
-	gh := GenericHook{ RepoName: reponame, RepoURL: repourl, LastCommit: last_commit, Branch: branch }
+	gh := genericHook{ RepoName: reponame, RepoURL: repourl, LastCommit: last_commit, Branch: branch }
 	return runHook(c, gh)
 }

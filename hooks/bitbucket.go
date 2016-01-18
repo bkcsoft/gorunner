@@ -6,91 +6,91 @@ import (
 	"io/ioutil"
 )
 
-type BitBucketLink struct {
+type bitbucketLink struct {
 	HREF string `json:"href"`
 }
 
-type BitbucketActor struct {
+type bitbucketActor struct {
 	Username    string `json:"username"`
 	DisplayName string `json:"display_name"`
 	Type        string `json:"user"`
 	UUID        string `json:"uuid"`
 	Links       struct {
-		Self   BitBucketLink `json:"self"`
-		HTML   BitBucketLink `json:"html"`
-		Avatar BitBucketLink `json:"avatar"`
+		Self   bitbucketLink `json:"self"`
+		HTML   bitbucketLink `json:"html"`
+		Avatar bitbucketLink `json:"avatar"`
 	} `json:"links"`
 }
 
-type BitbucketCommit struct {
+type bitbucketCommit struct {
 	Hash    string      `json:"hash"`
 	Parent  interface{} `json:"parent"`
 	Date    string      `json:"date"`
 	Message string      `json:"message"`
 	Type    string      `json:"type"`
 	Links   struct {
-		Self BitBucketLink `json:"self"`
-		HTML BitBucketLink `json:"html"`
+		Self bitbucketLink `json:"self"`
+		HTML bitbucketLink `json:"html"`
 	} `json:"links"`
 	Author struct {
 		Raw  string         `json:"raw"`
-		User BitbucketActor `json:"user"`
+		User bitbucketActor `json:"user"`
 	} `json:"author"`
 }
 
-type BitbucketChange struct {
+type bitbucketChange struct {
 	Type       string          `json:"type"`
 	Name       string          `json:"name"`
 	Repository interface{}     `json:"repository"`
-	Target     BitbucketCommit `json:"target"`
+	Target     bitbucketCommit `json:"target"`
 	Links      struct {
-		Commits BitBucketLink `json:"commits"`
-		HTML    BitBucketLink `json:"html"`
-		Self    BitBucketLink `json:"self"`
+		Commits bitbucketLink `json:"commits"`
+		HTML    bitbucketLink `json:"html"`
+		Self    bitbucketLink `json:"self"`
 	} `json:"links"`
 }
 
-type BitbucketChangeSet struct {
+type bitbucketChangeSet struct {
 	Forced    bool            `json:"forced"`
 	Created   bool            `json:"created"`
 	Truncated bool            `json:"truncated"`
 	Closed    bool            `json:"closed"`
-	Old       BitbucketChange `json:"old"`
-	New       BitbucketChange `json:"new"`
+	Old       bitbucketChange `json:"old"`
+	New       bitbucketChange `json:"new"`
 	Links     struct {
-		Diff    BitBucketLink `json:"diff"`
-		HTML    BitBucketLink `json:"html"`
-		Commits BitBucketLink `json:"commits"`
+		Diff    bitbucketLink `json:"diff"`
+		HTML    bitbucketLink `json:"html"`
+		Commits bitbucketLink `json:"commits"`
 	} `json:"links"`
 }
 
-type BitbucketPush struct {
-	Changes []BitbucketChangeSet `json:"changes"`
+type bitbucketPush struct {
+	Changes []bitbucketChangeSet `json:"changes"`
 }
 
-type BitbucketRepository struct {
+type bitbucketRepository struct {
 	Website   string         `json:"website"`
 	SCM       string         `json:"scm"`
-	Name      string         `json:"Fuckemon"`
+	Name      string         `json:"name"`
 	FullName  string         `json:"full_name"`
-	Owner     BitbucketActor `json:"owner"`
+	Owner     bitbucketActor `json:"owner"`
 	Type      string         `json:"type"`
 	IsPrivate bool           `json:"is_private"`
 	UUID      string         `json:"uuid"`
 	Links     struct {
-		Self   BitBucketLink `json:"self"`
-		HTML   BitBucketLink `json:"html"`
-		Avatar BitBucketLink `json:"avatar"`
+		Self   bitbucketLink `json:"self"`
+		HTML   bitbucketLink `json:"html"`
+		Avatar bitbucketLink `json:"avatar"`
 	} `json:"links"`
 }
 
-type BitbucketHook struct {
-	Push       BitbucketPush       `json:"push"`
-	Repository BitbucketRepository `json:"repository"`
-	Actor      BitbucketActor      `json:"actor"`
+type bitbucketHook struct {
+	Push       bitbucketPush       `json:"push"`
+	Repository bitbucketRepository `json:"repository"`
+	Actor      bitbucketActor      `json:"actor"`
 }
 
-func ParseBitbucketHook(r io.Reader) (bitbucket *BitbucketHook, err error) {
+func ParseBitbucketHook(r io.Reader) (bitbucket *bitbucketHook, err error) {
 	data, err := ioutil.ReadAll(r)
 	if err != nil {
 		//http.Error(w, err.Error(), http.StatusBadRequest)
