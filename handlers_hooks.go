@@ -49,6 +49,9 @@ func runHook(c context, gh genericHook) (int, interface{}) {
 
 	}
 
+	if len(ids) == 0 {
+		return http.StatusNotFound, nil
+	}
 	return http.StatusCreated, ids
 }
 
