@@ -1,3 +1,5 @@
 .dockerignore
 Godeps/_workspace
 db/
+data/
+gorunner
