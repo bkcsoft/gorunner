@@ -27,10 +27,7 @@ func readFile(filePath string) []byte {
 	_, err := os.Stat(filePath)
 	if err != nil {
 		println("Couldn't read file, creating fresh:", filePath)
-		err = ioutil.WriteFile(filePath, []byte("[]"), 0644)
-		if err != nil {
-			panic(err)
-		}
+		writeFile([]byte("[]"), filePath)
 	}
 
 	bytes, err := ioutil.ReadFile(filePath)
