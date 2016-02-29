@@ -12,13 +12,16 @@ import (
 	"gopkg.in/ini.v1"
 )
 
+// AppSettings stores Application Settings...
 type AppSettings struct {
 	AppName  string `ini:"APP_NAME"`
 	HTTPPort int    `ini:"HTTP_PORT"`
 	ServeIP  string `ini:"SERVE_IP"`
+	LogFile  string `ini:"LOG_FILE"`
 }
 
 var (
+	// Settings \o/
 	Settings AppSettings
 )
 
@@ -30,6 +33,13 @@ func loadSettings(filename string) {
 		log.Println("Failed to load `" + filename + "`. Using Defaults instead")
 		log.Println(err)
 		Settings.HTTPPort = 8090
+		Settings.ServeIP = "0.0.0.0"
+		Settings.LogFile = ""
+	}
+	if Settings.HTTPPort == 0 {
+		Settings.HTTPPort = 8090
+	}
+	if Settings.ServeIP == "" {
 		Settings.ServeIP = "0.0.0.0"
 	}
 }
@@ -131,6 +141,18 @@ func main() {
 	wd, _ := os.Getwd()
 	log.Println("Working directory", wd)
 
+	loadSettings("db/app.ini")
+	log.Println("Writing logs to ", Settings.LogFile)
+	if Settings.LogFile != "" {
+		f, err := os.OpenFile(Settings.LogFile, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+		if err != nil {
+			log.Printf("Can't open logfile! `%s` | Error: %#v\n", Settings.LogFile, err)
+			os.Exit(1)
+		}
+		defer f.Close()
+		log.SetOutput(f)
+	}
+
 	jobList := NewJobList()
 	taskList := NewTaskList()
 	triggerList := NewTriggerList()
@@ -159,7 +181,6 @@ func main() {
 	for _, detail := range routes {
 		r.Handle(detail.route, appHandler{appContext, detail.handler}).Methods(detail.method)
 	}
-	loadSettings("db/app.ini")
 
 	host := Settings.ServeIP + ":" + strconv.Itoa(Settings.HTTPPort)
 
