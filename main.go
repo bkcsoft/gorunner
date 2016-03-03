@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
-	. "github.com/jakecoffman/gorunner/service"
+	"github.com/jakecoffman/gorunner/service"
 
 	"gopkg.in/ini.v1"
 )
@@ -25,8 +25,6 @@ var (
 	Settings AppSettings
 )
 
-const port = ":8090"
-
 func loadSettings(filename string) {
 	err := ini.MapTo(&Settings, filename)
 	if err != nil {
@@ -36,6 +34,7 @@ func loadSettings(filename string) {
 		Settings.ServeIP = "0.0.0.0"
 		Settings.LogFile = ""
 	}
+	// Set defaults if omited...
 	if Settings.HTTPPort == 0 {
 		Settings.HTTPPort = 8090
 	}
@@ -83,45 +82,45 @@ var routes = []struct {
 }
 
 type ctx struct {
-	hub         *Hub
-	executor    *Executor
-	jobList     *JobList
-	taskList    *TaskList
-	triggerList *TriggerList
-	runList     *RunList
+	hub         *service.Hub
+	executor    *service.Executor
+	jobList     *service.JobList
+	taskList    *service.TaskList
+	triggerList *service.TriggerList
+	runList     *service.RunList
 }
 
-func (t ctx) Hub() *Hub {
+func (t ctx) Hub() *service.Hub {
 	return t.hub
 }
 
-func (t ctx) Executor() *Executor {
+func (t ctx) Executor() *service.Executor {
 	return t.executor
 }
 
-func (t ctx) JobList() *JobList {
+func (t ctx) JobList() *service.JobList {
 	return t.jobList
 }
 
-func (t ctx) TaskList() *TaskList {
+func (t ctx) TaskList() *service.TaskList {
 	return t.taskList
 }
 
-func (t ctx) TriggerList() *TriggerList {
+func (t ctx) TriggerList() *service.TriggerList {
 	return t.triggerList
 }
 
-func (t ctx) RunList() *RunList {
+func (t ctx) RunList() *service.RunList {
 	return t.runList
 }
 
 type context interface {
-	Hub() *Hub
-	Executor() *Executor
-	JobList() *JobList
-	TaskList() *TaskList
-	TriggerList() *TriggerList
-	RunList() *RunList
+	Hub() *service.Hub
+	Executor() *service.Executor
+	JobList() *service.JobList
+	TaskList() *service.TaskList
+	TriggerList() *service.TriggerList
+	RunList() *service.RunList
 }
 
 type appHandler struct {
@@ -153,20 +152,20 @@ func main() {
 		log.SetOutput(f)
 	}
 
-	jobList := NewJobList()
-	taskList := NewTaskList()
-	triggerList := NewTriggerList()
-	runList := NewRunList(jobList)
+	jobList := service.NewJobList()
+	taskList := service.NewTaskList()
+	triggerList := service.NewTriggerList()
+	runList := service.NewRunList(jobList)
 
 	jobList.Load()
 	taskList.Load()
 	triggerList.Load()
 	runList.Load()
 
-	hub := NewHub(runList)
+	hub := service.NewHub(runList)
 	go hub.HubLoop()
 
-	executor := NewExecutor(jobList, taskList, runList)
+	executor := service.NewExecutor(jobList, taskList, runList)
 
 	appContext := &ctx{hub, executor, jobList, taskList, triggerList, runList}
 
