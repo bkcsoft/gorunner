@@ -6,6 +6,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/fvbock/endless"
 	"github.com/gorilla/mux"
 	"github.com/jakecoffman/gorunner/service"
 
@@ -184,5 +185,10 @@ func main() {
 	host := Settings.ServeIP + ":" + strconv.Itoa(Settings.HTTPPort)
 
 	log.Println("Running on " + host)
-	http.ListenAndServe(host, r)
+	if Settings.LogFile == "" {
+		log.Println("Not logging to file, restart disabled...")
+		http.ListenAndServe(host, r)
+	} else {
+		endless.ListenAndServe(host, r)
+	}
 }
