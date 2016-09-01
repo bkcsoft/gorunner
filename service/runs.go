@@ -261,5 +261,5 @@ func getShell() (string, string) {
 	if "" != shell {
 		return shell, "-c"
 	}
-	return "cmd", "/C"
+	return "sh", "/C"
 }
