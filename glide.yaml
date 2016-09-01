@@ -1,0 +1,15 @@
+package: github.com/jakecoffman/gorunner
+import:
+- package: github.com/gorilla/context
+  version: 1c83b3eabd45b6d76072b66b746c20815fb2872d
+- package: github.com/gorilla/mux
+  version: 26a6070f849969ba72b72256e9f14cf519751690
+- package: github.com/gorilla/websocket
+  version: 3986be78bf859e01f01af631ad76da5b269d270c
+- package: github.com/jakecoffman/cron
+  version: 275d5b11d4d33013ff591751835185fc5c23cfe9
+- package: github.com/nu7hatch/gouuid
+  version: 179d4d0c4d8d407a32af483c2354df1d2c91e6c3
+- package: gopkg.in/ini.v1
+  version: v1.8.6
+- package: github.com/fvbock/endless
