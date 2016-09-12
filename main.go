@@ -141,6 +141,11 @@ func main() {
 	wd, _ := os.Getwd()
 	log.Println("Working directory", wd)
 
+	// We need `./db/`...
+	if dbStat, err := os.Stat(`./db`); err != nil || !dbStat.IsDir() {
+		os.Mkdir(`./db`, 0700)
+	 }
+
 	loadSettings("db/app.ini")
 	log.Println("Writing logs to ", Settings.LogFile)
 	if Settings.LogFile != "" {
